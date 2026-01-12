@@ -26,9 +26,14 @@ if df_pred.empty:
         # DB接続は成功しているがデータがない場合
         st.info("まだ予測データがありません。明日の朝9時の自動更新を待つか、GitHub Actionsから手動実行してください。")
     else:
-        # DB接続失敗の場合 (上記exceptで処理済みだが念のため)
-        pass
-    # st.stop() # 止めずに殻の画面を表示する（デバッグ用）
+        # DB接続失敗の場合
+        st.warning("データベース接続に失敗したため、アプリを停止します。")
+        st.markdown("""
+        **対策 (Supabase Connection Error):**
+        *   エラーに `Cannot assign requested address` (IPv6) が含まれる場合、Supabaseの **Direct Connection** ではなく **Transaction Pooler** (Port 6543) または **Session Pooler** (Port 5432) のURLを試してみてください。
+        *   または、URLの末尾に `?sslmode=require` を追加してみてください。
+        """)
+    st.stop()
 
 # --- サイドバー (フィルタ) ---
 st.sidebar.header("フィルタ設定")
