@@ -11,3 +11,11 @@ requests
 xlrd
 feedparser
 oseti
+# Added for v11+
+optuna
+xgboost
+catboost
+# Added for Cloud
+psycopg2-binary
+sqlalchemy
+setuptools
