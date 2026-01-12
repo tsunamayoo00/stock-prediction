@@ -1,0 +1,13 @@
+lightgbm
+pandas
+numpy
+matplotlib
+ta
+scikit-learn
+pandas-datareader
+streamlit
+openpyxl
+requests
+xlrd
+feedparser
+oseti
