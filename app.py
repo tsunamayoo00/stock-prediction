@@ -11,16 +11,24 @@ st.title("📈 AI株価予測ダッシュボード")
 st.markdown("全上場銘柄のAI予測結果を一元管理・比較するためのダッシュボードです。")
 
 # データのロード
-db = DataManager()
+# データのロード
 try:
+    db = DataManager()
     df_pred = db.get_latest_predictions()
 except Exception as e:
-    st.error(f"データベース読み込みエラー: {e}")
+    st.error(f"データベース接続エラー: {e}")
+    st.warning("ヒント: Streamlit CloudのSecrets (`DATABASE_URL`) が正しく設定されているか確認してください。")
+    st.info("チェックポイント: 1. パスワードは正しいですか？ 2. URLの先頭は `postgresql://` ですか？ 3. 末尾に `?sslmode=require` をつけてみてください。")
     df_pred = pd.DataFrame()
 
 if df_pred.empty:
-    st.warning("予測データが見つかりません。先に `batch_run.py` を実行してください。")
-    st.stop()
+    if 'db' in locals() and hasattr(db, 'engine'):
+        # DB接続は成功しているがデータがない場合
+        st.info("まだ予測データがありません。明日の朝9時の自動更新を待つか、GitHub Actionsから手動実行してください。")
+    else:
+        # DB接続失敗の場合 (上記exceptで処理済みだが念のため)
+        pass
+    # st.stop() # 止めずに殻の画面を表示する（デバッグ用）
 
 # --- サイドバー (フィルタ) ---
 st.sidebar.header("フィルタ設定")
